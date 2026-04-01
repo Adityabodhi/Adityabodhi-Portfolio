@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Adityabodhi Gaikwad</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #6ee7b7;
+    --accent2: #818cf8;
+    --text: #f0f0f5;
+    --muted: #8888a0;
+    --nav-bg: rgba(10,10,15,0.85);
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --accent: #10b981;
+    --accent2: #6366f1;
+    --text: #0f172a;
+    --muted: #64748b;
+    --nav-bg: rgba(248,250,252,0.85);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { transition: background-color 0.3s, color 0.3s; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s;
+  }
+
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--accent); text-decoration: none; }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--muted); text-decoration: none; font-size: 0.875rem;
+    border: 1px solid var(--border); padding: 6px 14px; border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+  main { padding: 8rem 4rem 4rem; }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+  .page-sub { color: var(--muted); margin-bottom: 3rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+
+  .card {
+     background: var(--card); border: 1px solid var(--border);
+     border-radius: 16px; padding: 1.75rem;
+     transition: border-color 0.2s, transform 0.2s;
+     display: flex; flex-direction: column;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(110,231,183,0.1); border: 1px solid rgba(110,231,183,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+  .links { display: flex; gap: 8px; }
+  .link { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); color: var(--muted); text-decoration: none; font-size: 0.75rem; transition: all 0.2s; }
+  .link:hover { border-color: var(--accent); color: var(--accent); }
+
+  .card-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .card-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; flex: 1; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1.25rem; }
+  .tag { font-size: 0.75rem; padding: 3px 10px; border-radius: 100px; background: rgba(129,140,248,0.1); color: var(--accent2); border: 1px solid rgba(129,140,248,0.2); }
+
+  @media(max-width:768px){ nav, main { padding: 1rem 1.5rem 2rem; } main { padding-top: 6rem; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="{% url 'home' %}" class="nav-logo">AB</a>
+  <a href="{% url 'home' %}" class="back-btn">← Back to Portfolio</a>
+</nav>
+<main>
+  <h1 class="page-title">All Projects</h1>
+  <p class="page-sub">Every project I've built — web apps, ML models, and more.</p>
+  <div class="grid">
+    {% for project in projects %}
+    <div class="card">
+      <div class="card-top">
+        <div class="icon">💡</div>
+        <div class="links">
+          {% if project.github_url %}<a href="{{ project.github_url }}" class="link" target="_blank">GH</a>{% endif %}
+          {% if project.live_url %}<a href="{{ project.live_url }}" class="link" target="_blank">↗</a>{% endif %}
+        </div>
+      </div>
+      <div class="card-title">{{ project.title }}</div>
+      <div class="card-desc">{{ project.description }}</div>
+      <div class="tags">
+        {% for tech in project.get_tech_list %}<span class="tag">{{ tech }}</span>{% endfor %}
+      </div>
+    </div>
+    {% empty %}
+    <p style="color:var(--muted)">No projects yet. Add them via the admin panel!</p>
+    {% endfor %}
+  </div>
+</main>
+<script>
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-theme', savedTheme);
+</script>
+</body>
+</html>

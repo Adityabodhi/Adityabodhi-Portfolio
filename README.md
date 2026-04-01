@@ -16,7 +16,7 @@ python manage.py runserver
 ```
 
 Visit → http://127.0.0.1:8000  
-
+Admin → http://127.0.0.1:8000/admin  (username: `admin`, password: `admin123`)
 
 ## 📄 Customization
 1. **Resume**: Replace `portfolio/static/portfolio/resume.pdf` with your actual resume PDF.
